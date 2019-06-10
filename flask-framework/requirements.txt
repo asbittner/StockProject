@@ -1,4 +1,9 @@
 gunicorn>=19.9.0
 requests>=2.20.0
-Quandl>=3.4.8
+Quandl
 bokeh
+dill
+flask
+jinja2
+pip
+simplejson
