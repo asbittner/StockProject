@@ -1,19 +1,20 @@
 from flask import Flask, render_template, request, redirect
-import quandl as qd
 import pandas as pd
 import bokeh.plotting as bk
 import bokeh.embed as bke
-
-qd.ApiConfig.api_key = 'WWhbwTh6zX3RTBHsv6a-'
+import requests as rq
+import simplejson as json
 
 def get_data(ticker, month, year):
-    df = qd.get('WIKI/' + ticker)
-    df['Date'] = df.index
-    df['Month'] = df['Date'].map(lambda x: x.month)
-    df['Day'] = df['Date'].map(lambda x: x.day)
-    df['Year'] = df['Date'].map(lambda x: x.year)
-    df_yr = df[df['Year'] == int(year)]
-    return df_yr[df_yr['Month'] == int(month)]
+    req = rq.get('https://www.quandl.com/api/v3/datasets/WIKI/' + ticker + '/data.json?api_key=WWhbwTh6zX3RTBHsv6a-')
+    j = req.json()
+    df = pd.DataFrame(j['dataset_data']['data'], columns = j['dataset_data']['column_names'])
+    df['DateList'] = df['Date'].str.split('-')
+    df['Month'] = df['DateList'].map(lambda x: x[1])
+    df['Day'] = df['DateList'].map(lambda x: int(x[2]))
+    df['Year'] = df['DateList'].map(lambda x: x[0])
+    df_yr = df[df['Year'] == year]
+    return df_yr[df_yr['Month'] == month]
 
 def plot_data(data):
     p = bk.figure()
@@ -44,5 +45,4 @@ def about():
   return render_template('about.html')
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+  app.run(port=33507, debug = True)
