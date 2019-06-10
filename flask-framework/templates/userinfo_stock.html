@@ -1,0 +1,28 @@
+<!doctype html>
+<title>Stock Closing Prices</title>
+<link rel=stylesheet type=text/css href='{{ url_for('static',filename='style_lulu.css')}}'>
+<div class=page>
+  <h1>Stock Closing Prices</h1>
+  <div class=metanav>
+
+<h4>
+Please enter the ticker, year, and month you are interested in. (e.g. AAPL, 1980, 12)
+</h4>
+
+<form id='userinfoform' method='post' action='stock_graph' > <!-- action is the URL you want to move to next-->
+    <p>
+   Ticker: <input type='text' name='ticker' />
+   </p>
+   <p>
+   Year: <input type='text' name='year' />
+   </p>
+   <p>
+   Month: <input type='text' name='month' />
+   </p>
+   <p>
+   <input type='submit' value='Submit' /> <!-- value is the text that will appear on the button. -->
+   </p>
+</form>
+
+</div>
+</div>
