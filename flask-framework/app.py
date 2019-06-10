@@ -10,17 +10,18 @@ def get_data(ticker, month, year):
     j = req.json()
     df = pd.DataFrame(j['dataset_data']['data'], columns = j['dataset_data']['column_names'])
     df['DateList'] = df['Date'].str.split('-')
-    df['Month'] = df['DateList'].map(lambda x: x[1])
+    df['Month'] = df['DateList'].map(lambda x: int(x[1]))
     df['Day'] = df['DateList'].map(lambda x: int(x[2]))
-    df['Year'] = df['DateList'].map(lambda x: x[0])
-    df_yr = df[df['Year'] == year]
-    return df_yr[df_yr['Month'] == month]
+    df['Year'] = df['DateList'].map(lambda x: int(x[0]))
+    df_yr = df[df['Year'] == int(year)]
+    return df_yr[df_yr['Month'] == int(month)]
 
-def plot_data(data):
+def plot_data(data, ticker):
     p = bk.figure()
     p.xaxis.axis_label = 'Date'
     p.yaxis.axis_label = 'Price'
-    p.line(data['Day'], data['Close'])
+    p.line(data['Day'], data['Open'], legend = ticker + ' Open', line_color="green")
+    p.line(data['Day'], data['Close'], legend = ticker + ' Close')
     return p
 
 
@@ -32,7 +33,7 @@ def graph_stock():
         return render_template('userinfo_stock.html')
     else:
         d = get_data(str(request.form['ticker']), str(request.form['month']), str(request.form['year']))
-        plot = plot_data(d)
+        plot = plot_data(d, str(request.form['ticker']))
         script,div = bke.components(plot)
         return render_template('plot_stock.html', script = script, div = div)
 
