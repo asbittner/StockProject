@@ -1,5 +1,5 @@
 pandas
-bokeh = 1.1.0
+bokeh
 dill
 flask
 jinja2
