@@ -1,8 +1,0 @@
-pandas
-bokeh==1.2.0
-dill
-flask
-jinja2
-pip
-simplejson
-tornado
