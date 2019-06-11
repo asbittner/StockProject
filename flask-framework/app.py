@@ -4,24 +4,25 @@ import bokeh.plotting as bk
 import bokeh.embed as bke
 import requests as rq
 import simplejson as json
+from datetime import datetime as dt
 
 def get_data(ticker, month, year):
     req = rq.get('https://www.quandl.com/api/v3/datasets/WIKI/' + ticker + '/data.json?api_key=WWhbwTh6zX3RTBHsv6a-')
     j = req.json()
     df = pd.DataFrame(j['dataset_data']['data'], columns = j['dataset_data']['column_names'])
-    df['DateList'] = df['Date'].str.split('-')
-    df['Month'] = df['DateList'].map(lambda x: int(x[1]))
-    df['Day'] = df['DateList'].map(lambda x: int(x[2]))
-    df['Year'] = df['DateList'].map(lambda x: int(x[0]))
+    df['DateTime'] = pd.to_datetime(df['Date'], format = '%Y-%m-%d')
+    df['Month'] = df['DateTime'].map(lambda x: x.month)
+    df['Day'] = df['DateTime'].map(lambda x: x.day)
+    df['Year'] = df['DateTime'].map(lambda x: x.year)
     df_yr = df[df['Year'] == int(year)]
     return df_yr[df_yr['Month'] == int(month)]
 
 def plot_data(data, ticker):
-    p = bk.figure()
+    p = bk.figure(x_axis_type = 'datetime')
     p.xaxis.axis_label = 'Date'
     p.yaxis.axis_label = 'Price'
-    p.line(data['Day'], data['Open'], legend = ticker + ' Open', line_color="green")
-    p.line(data['Day'], data['Close'], legend = ticker + ' Close')
+    p.line(data['DateTime'], data['Open'], legend = ticker + ' Open', line_color="green")
+    p.line(data['DateTime'], data['Close'], legend = ticker + ' Close')
     return p
 
 
