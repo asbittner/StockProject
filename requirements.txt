@@ -1,6 +1,6 @@
 bokeh>=1.2.0
 Flask>=0.12.2
-Jinja2>=2.9.6
+Jinja2>=2.10.1
 simplejson>=3.16.0
 tornado>=6.0.2
 gunicorn>=19.9.0
