@@ -2,7 +2,7 @@ bokeh>=1.2.0
 flask>=0.12.2
 Jinja2>=2.10.1
 simplejson>=3.16.0
-tornado>=6.0.2
+tornado>=5.4.3
 gunicorn>=19.9.0
 Quandl==3.4.8
 pip

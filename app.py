@@ -3,6 +3,7 @@ import pandas as pd
 import bokeh.plotting as bk
 import bokeh.embed as bke
 import quandl as qd
+from bokeh.models import ColumnDataSource, Band
 
 qd.ApiConfig.api_key = 'WWhbwTh6zX3RTBHsv6a-'
 
@@ -21,6 +22,15 @@ def plot_data(data, ticker):
     p.yaxis.axis_label = 'Price'
     p.line(data['Date'], data['Open'], legend = ticker + ' Open', line_color="green")
     p.line(data['Date'], data['Close'], legend = ticker + ' Close')
+    p.line(data['Date'], data['High'], legend = ticker + ' High', line_color = 'red')
+    p.line(data['Date'], data['Low'], legend = ticker + ' Low', line_color='orange')
+    source = ColumnDataSource({
+        'base':data['Date'],
+        'lower':data['Low'],
+        'upper':data['High']
+        })
+    band = Band(base='base', lower='lower', upper='upper',source=source, level='underlay', fill_alpha=1.0, line_width=1, line_color='black')
+    p.add_layout(band)
     return p
 
 
